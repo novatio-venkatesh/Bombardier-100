@@ -74,25 +74,26 @@
       <AssemblyReference>UiPath.Word</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="" DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Bot will search the each ticket from the queue and validate the location. if location is valid then it will assign the technician if not it will send back the ticket to Service Desk. " DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Starting&quot;]" />
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Searching For Each Ticket  workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Location Validation and Queue\Searching For Each Ticket .xaml">
       <ui:InvokeWorkflowFile.Arguments>
         <InArgument x:TypeArguments="ui:Browser" x:Key="in_ServiceNowBrowser">[in_ServiceNowBrowser]</InArgument>
         <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[in_TransactionItem]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_WorkFlowQueueUrl">[in_Config("WorkFlow Automation Url").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_RerouteWorknote">[in_Config("RerouteWorknotes").ToString]</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="in_WorkFlowAutomationQueue">[in_Config("BotQueueUrl").ToString]</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
-    <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message Box" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[&quot; done &quot;]" TopMost="True" />
     <ui:LogMessage DisplayName="Log message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Ending&quot;]" />
-    <sads:DebugSymbol.Symbol>d0FDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXFByb2Nlc3MueGFtbAtNA1gOAgEBTgVOjQECAQxPBVQdAgEGVQVVwgECAQRWBVaLAQIBAk5yTooBAgENUU9RZQIBClJPUmMCAQhPxwFPhgICAQdVmgFVsAECAQVWclaIAQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXFByb2Nlc3MueGFtbAxNA1oOAgEBTgVOjQECARBPBVcdAgEEWAVYiwECAQJOck6KAQIBEVRLVHMCAQ5RT1FlAgEMVVNVdgIBClNMU3sCAQhST1JjAgEGT8cBT4YCAgEFWHJYiAECAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
       <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
-      <sap2010:ViewStateData Id="MessageBox_1" sap:VirtualizedContainerService.HintSize="314,59" />
       <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,599">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,545">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -100,7 +101,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="376,679" />
+      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="376,625" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

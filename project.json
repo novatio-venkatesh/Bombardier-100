@@ -1,5 +1,5 @@
 {
-  "name": "NTTData_UIPath_Template",
+  "name": "Bombardier-100",
   "description": "NTTData Template - Robotic Enterprise Framework",
   "main": "Main.xaml",
   "dependencies": {
@@ -19,7 +19,7 @@
   },
   "schemaVersion": "3.2",
   "studioVersion": "18.2",
-  "projectVersion": "1.0.6745.20054",
+  "projectVersion": "1.0.7178.29491",
   "runtimeOptions": {
     "autoDispose": false,
     "excludedLoggedData": [
@@ -31,5 +31,9 @@
   "libraryOptions": {
     "includeOriginalXaml": false,
     "privateWorkflows": []
+  },
+  "arguments": {
+    "input": [],
+    "output": []
   }
 }

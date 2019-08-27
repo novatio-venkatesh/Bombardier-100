@@ -12,6 +12,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="in_DtFinalMapping" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="o_AssignmentGroup" Type="OutArgument(sd:DataRow)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
@@ -72,10 +73,9 @@
       <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
       <AssemblyReference>UiPath.Studio.Plugin.Workflow</AssemblyReference>
       <AssemblyReference>System.Data.Entity</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Work Notes" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="If the locaton was not valid in short description and description  then bot will search the worknotes , so in this process the bot will search the location in work notes from most recent one . if it is not valid then it will assigin back to SD " DisplayName="Work Notes" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="str_Worknotes" />
       <Variable x:TypeArguments="x:Int32" Name="int_chk" />
@@ -100,7 +100,7 @@
     </Assign>
     <DoWhile DisplayName="Do While- If Matching Check" sap2010:WorkflowViewState.IdRef="DoWhile_1" Condition="[str_Worknotes IsNot Nothing]">
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_16">
-        <Assign sap2010:WorkflowViewState.IdRef="Assign_12">
+        <Assign DisplayName="Assign-Work Notes" sap2010:WorkflowViewState.IdRef="Assign_12">
           <Assign.To>
             <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
           </Assign.To>
@@ -116,67 +116,82 @@
             <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
           </ui:GetFullText.Text>
         </ui:GetFullText>
-        <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message Box" sap2010:WorkflowViewState.IdRef="MessageBox_12" Text="[str_Worknotes+&quot; Work Notes&quot;]" TopMost="True" />
-        <Assign>
-          <Assign.To>
-            <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
-          </Assign.To>
-          <Assign.Value>
-            <InArgument x:TypeArguments="x:String">[system.Text.RegularExpressions.Regex.Replace(str_Worknotes,"[^0-9A-Za-z]+"," ")]</InArgument>
-          </Assign.Value>
-          <sap2010:WorkflowViewState.IdRef>Assign_21</sap2010:WorkflowViewState.IdRef>
-        </Assign>
-        <If Condition="[not string.IsNullOrWhiteSpace(str_Worknotes)]" DisplayName="If Get Text Output is Not empty" sap2010:WorkflowViewState.IdRef="If_11">
-          <If.Then>
-            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_26">
-              <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[in_DtFinalMapping]" DisplayName="For Each Row Check For Street" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
-                <ui:ForEachRow.Body>
-                  <ActivityAction x:TypeArguments="sd:DataRow">
-                    <ActivityAction.Argument>
-                      <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
-                    </ActivityAction.Argument>
-                    <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_25">
-                      <Sequence.Variables>
-                        <Variable x:TypeArguments="x:String" Name="Str_LocationSheet" />
-                      </Sequence.Variables>
-                      <Assign>
-                        <Assign.To>
-                          <OutArgument x:TypeArguments="x:String">[Str_LocationSheet]</OutArgument>
-                        </Assign.To>
-                        <Assign.Value>
-                          <InArgument x:TypeArguments="x:String">[system.Text.RegularExpressions.Regex.Replace(row("Name").ToString,"[^0-9A-Za-z]+"," ")]</InArgument>
-                        </Assign.Value>
-                        <sap2010:WorkflowViewState.IdRef>Assign_22</sap2010:WorkflowViewState.IdRef>
-                      </Assign>
-                      <If Condition="[str_Worknotes.ToLower.Contains(Str_LocationSheet.ToLower.Trim) and not string.IsNullOrWhiteSpace(row(&quot;Name&quot;).ToString.ToLower.Trim)]" DisplayName="If- Street Got Matched " sap2010:WorkflowViewState.IdRef="If_14">
-                        <If.Then>
-                          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_24">
-                            <Assign DisplayName="Assign- Location Check" sap2010:WorkflowViewState.IdRef="Assign_19">
+        <If Condition="[string.IsNullOrWhiteSpace(str_Worknotes)]" DisplayName="If-WorkNotes Are Empty" sap2010:WorkflowViewState.IdRef="If_16">
+          <If.Else>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_27">
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_21">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[system.Text.RegularExpressions.Regex.Replace(str_Worknotes,"[^0-9A-Za-z]+","")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <If Condition="[not string.IsNullOrWhiteSpace(str_Worknotes)]" DisplayName="If Get Text Output is Not empty" sap2010:WorkflowViewState.IdRef="If_11">
+                <If.Then>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_26">
+                    <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[in_DtFinalMapping]" DisplayName="For Each Row Check For Street" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                      <ui:ForEachRow.Body>
+                        <ActivityAction x:TypeArguments="sd:DataRow">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                            <Sequence.Variables>
+                              <Variable x:TypeArguments="x:String" Name="Str_LocationSheet" />
+                            </Sequence.Variables>
+                            <Assign sap2010:WorkflowViewState.IdRef="Assign_22">
                               <Assign.To>
-                                <OutArgument x:TypeArguments="x:Boolean">[B_LocationMapping]</OutArgument>
+                                <OutArgument x:TypeArguments="x:String">[Str_LocationSheet]</OutArgument>
                               </Assign.To>
                               <Assign.Value>
-                                <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                <InArgument x:TypeArguments="x:String">[system.Text.RegularExpressions.Regex.Replace(row("Name").ToString,"[^0-9A-Za-z]+","")]</InArgument>
                               </Assign.Value>
                             </Assign>
-                            <Assign DisplayName="Assign-Street Check" sap2010:WorkflowViewState.IdRef="Assign_20">
-                              <Assign.To>
-                                <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
-                              </Assign.To>
-                              <Assign.Value>
-                                <InArgument x:TypeArguments="x:String">[nothing]</InArgument>
-                              </Assign.Value>
-                            </Assign>
-                            <ui:Break sap2010:WorkflowViewState.IdRef="Break_1" />
+                            <If Condition="[not string.IsNullOrWhiteSpace(Str_LocationSheet)]" DisplayName="If- Str location is not empty" sap2010:WorkflowViewState.IdRef="If_17">
+                              <If.Then>
+                                <If Condition="[(str_Worknotes.ToLower.Contains(Str_LocationSheet.ToLower.Trim))]" DisplayName="If- Street Got Matched " sap2010:WorkflowViewState.IdRef="If_14">
+                                  <If.Then>
+                                    <Sequence sap2010:WorkflowViewState.IdRef="Sequence_24">
+                                      <Assign DisplayName="Assign- Location Check" sap2010:WorkflowViewState.IdRef="Assign_19">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:Boolean">[B_LocationMapping]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <Assign DisplayName="Assign- Data Row" sap2010:WorkflowViewState.IdRef="Assign_24">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="sd:DataRow">[o_AssignmentGroup]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="sd:DataRow">[row]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <Assign DisplayName="Assign-Street Check" sap2010:WorkflowViewState.IdRef="Assign_20">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:String">[nothing]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:Break sap2010:WorkflowViewState.IdRef="Break_1" />
+                                    </Sequence>
+                                  </If.Then>
+                                </If>
+                              </If.Then>
+                            </If>
                           </Sequence>
-                        </If.Then>
-                      </If>
-                    </Sequence>
-                  </ActivityAction>
-                </ui:ForEachRow.Body>
-              </ui:ForEachRow>
+                        </ActivityAction>
+                      </ui:ForEachRow.Body>
+                    </ui:ForEachRow>
+                  </Sequence>
+                </If.Then>
+              </If>
             </Sequence>
-          </If.Then>
+          </If.Else>
         </If>
         <Assign sap2010:WorkflowViewState.IdRef="Assign_10">
           <Assign.To>
@@ -194,29 +209,29 @@
       </If.Else>
     </If>
     <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Ending&quot;]" />
-    <sads:DebugSymbol.Symbol>d2JDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXExvY2F0aW9uIFZhbGlkYXRpb24gYW5kIFF1ZXVlXFdvcmsgTm90ZXMueGFtbDVOA8YBDgIBAVQFVI0BAgFFVQVcDgIBQV0FZA4CAT1lBb4BDwIBCb8BBcMBCgIBBMQBBcQBiwECAQJUclSKAQIBRlovWjACAURXMFc5AgFCYjFiNgIBQF8yX0UCAT5lbmWNAQIBO2YHvQESAgEKvwETvwEoAgEFwQEJwQGaAQIBB8QBcsQBiAECAQNnCW4SAgE3bwl2GgIBMHcJd9oBAgEteAmAARICASiBAQm0AQ4CARC1AQm8ARICAQvBARrBAW0CAQhsNGw9AgE6aTVpRAIBOHGHAXH4AgIBNXGDA3GJAwIBNG8pby8CATN0NXREAgExd58Bd8gBAgEufTR9hQECASt6NXpEAgEpgQEXgQFHAgERgwENsgEYAgETugEzugE+AgEOtwE0twE9AgEMhAEPsQEfAgEUhAFAhAFVAgEmigEVrgEgAgEVjgEXlgEgAgEilwEXrQEcAgEWkwFCkwGaAQIBJZABQ5ABVgIBI5cBJZcBtgECAReZARurASYCARiaAR2hASYCAR6iAR2pASYCARqqAR2qAVMCARmfAUmfAU0CASGcAUqcAV0CAR+nAUinAVECAR2kAUmkAVgCARs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2JDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXExvY2F0aW9uIFZhbGlkYXRpb24gYW5kIFF1ZXVlXFdvcmsgTm90ZXMueGFtbDtOA9UBDgIBAVQFVI0BAgFQVQVcDgIBTF0FZA4CAUhlBc0BDwIBCc4BBdIBCgIBBNMBBdMBiwECAQJUclSKAQIBUVovWjACAU9XMFc5AgFNYjFiNgIBS18yX0UCAUllbmWNAQIBRmYHzAESAgEKzgETzgEoAgEF0AEJ0AGaAQIBB9MBctMBiAECAQNnCW4SAgFCbwl2GgIBO3cJwwEOAgEQxAEJywESAgEL0AEa0AFtAgEIbDRsPQIBRWk1aUQCAUNxhwFx+AICAUBxgwNxiQMCAT9vKW8vAgE+dDV0RAIBPHcXd0MCARF5DcEBGAIBE8kBM8kBPgIBDsYBNMYBPQIBDHoPgQEYAgE2ggEPwAEUAgEUfzp/igECATl8O3xKAgE3ggEdggFNAgEVhAETvgEeAgEXhQEVvQElAgEYhQFGhQFbAgE0iwEbugEmAgEZjwEdlgEmAgEwlwEduQEiAgEalAFIlAGfAQIBM5EBSZEBXAIBMZcBK5cBXwIBG5kBIbcBJgIBHZkBL5kBcwIBHpsBJbUBMAIBIZwBJ6MBMAIBLKQBJ6sBMAIBJ6wBJ7MBMAIBI7QBJ7QBXQIBIqEBU6EBVwIBL54BVJ4BZwIBLakBVKkBWQIBKqYBVaYBaAIBKLEBUrEBWwIBJq4BU64BYgIBJA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="711,91" />
-      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="711,60" />
-      <sap2010:ViewStateData Id="Assign_18" sap:VirtualizedContainerService.HintSize="711,60" />
-      <sap2010:ViewStateData Id="Assign_12" sap:VirtualizedContainerService.HintSize="663,60" />
-      <sap2010:ViewStateData Id="GetFullText_1" sap:VirtualizedContainerService.HintSize="663,106" />
-      <sap2010:ViewStateData Id="MessageBox_12" sap:VirtualizedContainerService.HintSize="663,59" />
-      <sap2010:ViewStateData Id="Assign_21" sap:VirtualizedContainerService.HintSize="663,60" />
-      <sap2010:ViewStateData Id="Assign_22" sap:VirtualizedContainerService.HintSize="464,60" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Assign_18" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Assign_12" sap:VirtualizedContainerService.HintSize="935,60" />
+      <sap2010:ViewStateData Id="GetFullText_1" sap:VirtualizedContainerService.HintSize="935,106" />
+      <sap2010:ViewStateData Id="Assign_21" sap:VirtualizedContainerService.HintSize="788,60" />
+      <sap2010:ViewStateData Id="Assign_22" sap:VirtualizedContainerService.HintSize="589,60" />
       <sap2010:ViewStateData Id="Assign_19" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="Assign_24" sap:VirtualizedContainerService.HintSize="242,60" />
       <sap2010:ViewStateData Id="Assign_20" sap:VirtualizedContainerService.HintSize="242,60" />
       <sap2010:ViewStateData Id="Break_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_24" sap:VirtualizedContainerService.HintSize="264,346">
+      <sap2010:ViewStateData Id="Sequence_24" sap:VirtualizedContainerService.HintSize="264,446">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_14" sap:VirtualizedContainerService.HintSize="464,494">
+      <sap2010:ViewStateData Id="If_14" sap:VirtualizedContainerService.HintSize="464,594">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -224,14 +239,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="486,718">
+      <sap2010:ViewStateData Id="If_17" sap:VirtualizedContainerService.HintSize="589,742" />
+      <sap2010:ViewStateData Id="Sequence_25" sap:VirtualizedContainerService.HintSize="611,966">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEachRow_1" sap:VirtualizedContainerService.HintSize="516,866">
+      <sap2010:ViewStateData Id="ForEachRow_1" sap:VirtualizedContainerService.HintSize="641,1114">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -239,7 +255,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_26" sap:VirtualizedContainerService.HintSize="538,990">
+      <sap2010:ViewStateData Id="Sequence_26" sap:VirtualizedContainerService.HintSize="663,1238">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -247,7 +263,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="663,1138">
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="788,1386">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -255,33 +271,49 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Assign_10" sap:VirtualizedContainerService.HintSize="663,60" />
-      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="685,1807">
+      <sap2010:ViewStateData Id="Sequence_27" sap:VirtualizedContainerService.HintSize="810,1610">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="DoWhile_1" sap:VirtualizedContainerService.HintSize="711,1969">
+      <sap2010:ViewStateData Id="If_16" sap:VirtualizedContainerService.HintSize="935,1758" />
+      <sap2010:ViewStateData Id="Assign_10" sap:VirtualizedContainerService.HintSize="935,60" />
+      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="957,2228">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="DoWhile_1" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
             <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Throw_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_15" sap:VirtualizedContainerService.HintSize="711,208" />
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="711,91" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="733,2803">
+      <sap2010:ViewStateData Id="If_15" sap:VirtualizedContainerService.HintSize="314,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="_Test_1" sap:VirtualizedContainerService.HintSize="773,2883" />
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="336,815">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="_Test_1" sap:VirtualizedContainerService.HintSize="376,895" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

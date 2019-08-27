@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -73,10 +74,9 @@
       <AssemblyReference>UiPath.PDF</AssemblyReference>
       <AssemblyReference>UiPath.Word</AssemblyReference>
       <AssemblyReference>System.Data.Entity</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Pre Condition : ServiceNow Application Successfully Logged In&#xA;Post Condition:  Incident Ticket Numbers are Added to Orchestrator    Queue&#xA;Process: Bot Will Look For State Type is Pending And Working In Progress&#xA;We saved This Filter As RPA " DisplayName="Adding Tickets to Queue" sap2010:WorkflowViewState.IdRef="Sequence_2">
+  <Sequence sap2010:Annotation.AnnotationText="Pre Condition : ServiceNow Application Successfully Logged In&#xA;Post Condition:  Incident Ticket Numbers are Added to Orchestrator Queue&#xA;Process: Bot navigate to the Workflow Automation queue and scrape the data. bot will add the tickets to the queue, the one which starts the shortdescription as  &quot;SD&quot; " DisplayName="Adding Tickets to Queue" sap2010:WorkflowViewState.IdRef="Sequence_2">
     <Sequence.Variables>
       <Variable x:TypeArguments="sd:DataTable" Name="Dt_WorkFlowQueue" />
     </Sequence.Variables>
@@ -94,7 +94,7 @@
             <ui:NavigateTo Browser="{x:Null}" DisplayName="Navigate To WorkFlow Automaion Queue" sap2010:WorkflowViewState.IdRef="NavigateTo_1" Url="[in_WorkFlowQueueUrl]" />
             <ui:UiElementExists DisplayName="Element Exists 'Task -WorkFlow Automation tool Page'" Exists="[B_BisHomePage]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
               <ui:UiElementExists.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a7929d2085df53a9376b41f1901baa7e" Selector="&lt;html app='firefox.exe' /&gt;&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl tag='SPAN' aaname='Go to' parentclass='nav navbar-left' /&gt;" TimeoutMS="30000" WaitForReady="COMPLETE" />
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a7929d2085df53a9376b41f1901baa7e" Selector="&lt;html app='firefox.exe' title='Tasks | BIS Greenfield - PROD' /&gt;&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl aaname='Update Personalized List' parentid='hdr_task' tag='I' idx='2' /&gt;" TimeoutMS="30000" WaitForReady="COMPLETE" />
               </ui:UiElementExists.Target>
             </ui:UiElementExists>
             <If Condition="[B_BisHomePage]" DisplayName="If- Bis Home Page Exist" sap2010:WorkflowViewState.IdRef="If_12">
@@ -102,7 +102,7 @@
                 <Throw Exception="[new exception(&quot;WorkFlow Home Page Load Error&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_4" />
               </If.Else>
             </If>
-            <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign DisplayName="Assign- Init Datatable" sap2010:WorkflowViewState.IdRef="Assign_1">
               <Assign.To>
                 <OutArgument x:TypeArguments="sd:DataTable">[Dt_WorkFlowQueue]</OutArgument>
               </Assign.To>
@@ -110,9 +110,19 @@
                 <InArgument x:TypeArguments="sd:DataTable">[new system.Data.DataTable]</InArgument>
               </Assign.Value>
             </Assign>
-            <ui:ExtractData ContinueOnError="True" DataTable="[Dt_WorkFlowQueue]" DelayBetweenPagesMS="300" DisplayName="Extract Structured Data 'WorkFlow Automation Queue'" ExtractMetadata="&lt;extract-table get_columns_name='1' get_empty_columns='1' /&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_4" MaxNumberOfResults="0" NextLinkSelector="&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl parentid='*_next' tag='SPAN' /&gt;">
+            <ui:UiElementExists DisplayName="Element Exists 'New Tickets to Process'" Exists="[B_BisHomePage]" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+              <ui:UiElementExists.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1020e4c982873cd36afe67d63eb70a25" Selector="&lt;html app='firefox.exe' title='Tasks | BIS Greenfield - PROD' /&gt;&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl tag='LABEL' aaname='Select record for action' class='checkbox-label' tableCol='1' tableRow='4' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+              </ui:UiElementExists.Target>
+            </ui:UiElementExists>
+            <If Condition="[B_BisHomePage]" DisplayName="If- New Tickets to process" sap2010:WorkflowViewState.IdRef="If_15">
+              <If.Else>
+                <Throw DisplayName="Throw- BusinessExp-NoRecords" Exception="[new businessruleexception(&quot; There are no records to proceess in a WorkflowAutomation Queue&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_5" />
+              </If.Else>
+            </If>
+            <ui:ExtractData ContinueOnError="True" DataTable="[Dt_WorkFlowQueue]" DelayBetweenPagesMS="300" DisplayName="Extract Structured Data 'WorkFlow Automation Queue'" ExtractMetadata="&lt;extract-table get_columns_name='1' get_empty_columns='1' /&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_5" MaxNumberOfResults="0" NextLinkSelector="&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl parentid='*_next' tag='SPAN' /&gt;">
               <ui:ExtractData.Target>
-                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8974b0eeeacb2fa1c5f50b3445ed7e1d" Selector="&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl id='task_table' tag='TABLE' /&gt;" WaitForReady="COMPLETE" />
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3c3f6cbc7a7cb5800044750ab476273e" Selector="&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl id='task_table' tag='TABLE' /&gt;" WaitForReady="COMPLETE" />
               </ui:ExtractData.Target>
             </ui:ExtractData>
             <If Condition="[Dt_WorkFlowQueue.Rows.Count&gt;1]" DisplayName="If There is no Queues  or no Records " sap2010:WorkflowViewState.IdRef="If_9">
@@ -120,22 +130,46 @@
                 <Throw DisplayName="Throw- BusinessExp-NoRecords" Exception="[new businessruleexception(&quot; There are no records to proceess in a WorkflowAutomation Queue&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_3" />
               </If.Else>
             </If>
-            <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[Dt_WorkFlowQueue]" DisplayName="For Each Row" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+            <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[Dt_WorkFlowQueue]" DisplayName="For Each Row- Datatable for incident Tickets " sap2010:WorkflowViewState.IdRef="ForEachRow_2">
               <ui:ForEachRow.Body>
                 <ActivityAction x:TypeArguments="sd:DataRow">
                   <ActivityAction.Argument>
                     <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
                   </ActivityAction.Argument>
                   <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_14">
-                    <If Condition="[String.IsNullOrWhiteSpace(row(2).ToString) or row(6).ToString.Contains(&quot;BOTA&quot;) or String.IsNullOrWhiteSpace(row(6).ToString) or row(2).ToString.Contains(&quot;No records to display&quot;)]" DisplayName="If- Short Description Contains KeyWords %BOTA and  SD In The Description" sap2010:WorkflowViewState.IdRef="If_11">
-                      <If.Else>
-                        <ui:AddQueueItem ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Add Queue Item" sap2010:WorkflowViewState.IdRef="AddQueueItem_9" Priority="High" QueueType="[in_Orchestrator_QueueName]" Reference="[row(2).ToString]">
-                          <ui:AddQueueItem.ItemInformation>
-                            <InArgument x:TypeArguments="x:String" x:Key="Ticket Number">[row(2).ToString]</InArgument>
-                            <InArgument x:TypeArguments="x:String" x:Key="Short Description">[row(6).ToString]</InArgument>
-                          </ui:AddQueueItem.ItemInformation>
-                        </ui:AddQueueItem>
-                      </If.Else>
+                    <If Condition="[NOT string.IsNullOrWhiteSpace(row(2).ToString) and ( row(2).ToString.Trim.StartsWith(&quot;IN&quot;) or row(2).ToString.Trim.StartsWith(&quot;SC&quot;) or row(2).ToString.Trim.StartsWith(&quot;CH&quot;))]" DisplayName="If- Tickets Filter  " sap2010:WorkflowViewState.IdRef="If_14">
+                      <If.Then>
+                        <If Condition="[String.IsNullOrWhiteSpace(row(2).ToString) or row(6).ToString.Contains(&quot;BOTA&quot;) or String.IsNullOrWhiteSpace(row(6).ToString) or row(2).ToString.Contains(&quot;No records to display&quot;)]" DisplayName="If- Short Description Contains KeyWords %BOTA and  SD In The Description" sap2010:WorkflowViewState.IdRef="If_11">
+                          <If.Else>
+                            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_15">
+                              <If Condition="[row(6).ToString.trim.tolower.StartsWith(&quot;sd&quot;)]" DisplayName="if  Short Description Contains  Sd" sap2010:WorkflowViewState.IdRef="If_13">
+                                <If.Then>
+                                  <TryCatch DisplayName="Try Catch" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                                    <TryCatch.Try>
+                                      <ui:AddQueueItem ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Add Queue Item" sap2010:WorkflowViewState.IdRef="AddQueueItem_9" Priority="High" QueueType="[in_Orchestrator_QueueName]" Reference="[row(2).ToString]">
+                                        <ui:AddQueueItem.ItemInformation>
+                                          <InArgument x:TypeArguments="x:String" x:Key="Ticket Number">[row(2).ToString]</InArgument>
+                                          <InArgument x:TypeArguments="x:String" x:Key="Short Description">[row(6).ToString]</InArgument>
+                                        </ui:AddQueueItem.ItemInformation>
+                                      </ui:AddQueueItem>
+                                    </TryCatch.Try>
+                                    <TryCatch.Catches>
+                                      <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+                                        <ActivityAction x:TypeArguments="s:Exception">
+                                          <ActivityAction.Argument>
+                                            <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                                          </ActivityAction.Argument>
+                                          <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Error" Message="[&quot; Queue Exception Ocurred&quot;]" />
+                                        </ActivityAction>
+                                      </Catch>
+                                    </TryCatch.Catches>
+                                  </TryCatch>
+                                </If.Then>
+                              </If>
+                            </Sequence>
+                          </If.Else>
+                        </If>
+                      </If.Then>
                     </If>
                   </Sequence>
                 </ActivityAction>
@@ -146,37 +180,22 @@
       </ui:BrowserScope.Body>
     </ui:BrowserScope>
     <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Ending&quot;]" />
-    <sads:DebugSymbol.Symbol>d29DOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXExvY2F0aW9uIFZhbGlkYXRpb24gYW5kIFF1ZXVlXEFkZGluZyBUaWNrZXRzIHRvIFF1ZXVlLnhhbWwrTwOWAQ4CAQFTBVONAQIBMlQFkwEXAgEElAEFlAGLAQIBAlNyU4oBAgEzVHNUhgECATBaC5ABFgIBBZQBcpQBiAECAQNeDV6vAQIBLV8NYyICAShkDWgSAgEjaQ1wFgIBH3ENdR4CARZ2DXoSAgESew2PAR0CAQZelQFerAECAS5hiwFhowICASxhrgJhtQICAStfa198AgEpZBtkLAIBJGYRZosBAgEmbjxuVwIBIms9a08CASBxxwJxygICAR5zoAFz/AECAR1xZ3FsAgEccS1xMwIBG3E+cVICARlx3AJxuQMCARhxvwFxgwICARd2G3Y/AgETeBF45AECARR7PntSAgEQgQETjAEeAgEHZiJmXgIBJ3hNeLcBAgEVggEViwEaAgEIggEjggHsAQIBCYQBGYkBKwIBCoQB7QGEAYACAgEPhAHFAYQB4gECAQ2GAVqGAWsCAQyHAV6HAW8CAQs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d29DOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXExvY2F0aW9uIFZhbGlkYXRpb24gYW5kIFF1ZXVlXEFkZGluZyBUaWNrZXRzIHRvIFF1ZXVlLnhhbWw7TwO4AQ4CAQFTBVONAQIBRFQFtQEXAgEEtgEFtgGLAQIBAlNyU4oBAgFFVHNUhgECAUJaC7IBFgIBBbYBcrYBiAECAQNeDV6vAQIBP18NYyICATpkDWgSAgE1aQ1wFgIBMXENdSICASx2DXoSAgEnew1/HgIBHoABDYQBEgIBGoUBDbEBHQIBBl6VAV6sAQIBQGGLAWHXAgIBPmHiAmHpAgIBPV9rX3wCATtkG2QsAgE2ZhFmiwECAThuPG5XAgE0az1rTwIBMnOLAXPwAgIBMHP7AnOBAwIBL3FecW8CAS12G3YsAgEoeBF45AECASp7xwJ7ygICASZ9oAF9/AECASV7Z3tsAgEkey17MwIBI3s+e1ICASF73AJ7uQMCASB7vwF7gwICAR+AARuAAT8CARuCARGCAeQBAgEchQE+hQFSAgEYiwETrgEeAgEHZiJmXgIBOXhNeLcBAgErggFNggG3AQIBHYwBFa0BGgIBCIwBI4wB8gECAQmOARmrAR4CAQqOASeOAfABAgELkAEdqQEoAgEMkQEfqAEkAgENkQEtkQFoAgEOkwEjpgEuAgEPlQEnmgE5AgESogErogHEAQIBEJUB+wGVAY4CAgEXlQHTAZUB8AECARWXAWiXAXkCARSYAWyYAX0CAROiAZkBogHBAQIBEQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="552,91" />
-      <sap2010:ViewStateData Id="NavigateTo_1" sap:VirtualizedContainerService.HintSize="516,59" />
-      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="516,106" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="NavigateTo_1" sap:VirtualizedContainerService.HintSize="464,59" />
+      <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="464,106" />
       <sap2010:ViewStateData Id="Throw_4" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="516,207" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="516,60" />
-      <sap2010:ViewStateData Id="ExtractData_4" sap:VirtualizedContainerService.HintSize="516,106" />
+      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="464,207" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,60" />
+      <sap2010:ViewStateData Id="UiElementExists_2" sap:VirtualizedContainerService.HintSize="464,106" />
+      <sap2010:ViewStateData Id="Throw_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_15" sap:VirtualizedContainerService.HintSize="464,207" />
+      <sap2010:ViewStateData Id="ExtractData_5" sap:VirtualizedContainerService.HintSize="464,106" />
       <sap2010:ViewStateData Id="Throw_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="516,207" />
-      <sap2010:ViewStateData Id="AddQueueItem_9" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="464,207" />
-      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="486,331">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEachRow_2" sap:VirtualizedContainerService.HintSize="516,478" />
-      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="538,1587">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="BrowserScope_1" sap:VirtualizedContainerService.HintSize="552,1733">
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="464,207">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -184,8 +203,80 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="552,91" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="574,2191">
+      <sap2010:ViewStateData Id="AddQueueItem_9" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LogMessage_3" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="400,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="200,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_13" sap:VirtualizedContainerService.HintSize="464,207">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_15" sap:VirtualizedContainerService.HintSize="486,331">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="611,478">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_14" sap:VirtualizedContainerService.HintSize="736,625" />
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="758,749">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEachRow_2" sap:VirtualizedContainerService.HintSize="464,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="486,1553">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="BrowserScope_1" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,569">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -193,7 +284,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Adding_Tickets_to_Queue_1" sap:VirtualizedContainerService.HintSize="614,2271" />
+      <sap2010:ViewStateData Id="Adding_Tickets_to_Queue_1" sap:VirtualizedContainerService.HintSize="376,649" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

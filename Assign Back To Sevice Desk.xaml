@@ -1,0 +1,328 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Assign_Back_To_Sevice_Desk" mva:VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="Assign_Back_To_Sevice_Desk_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Text.RegularExpressions</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.IntelligentOCR</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.PDF</AssemblyReference>
+      <AssemblyReference>UiPath.Word</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Plugin.Workflow</AssemblyReference>
+      <AssemblyReference>System.Data.Entity</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="If the location is not valid in description and worknotes then the bot has to send back the ticket  to  service desk. so here the bot will look for the most recent assignment group in the worknotes which is in the format of &quot; xxxx was yyyy&quot; " DisplayName="Assign Back To Sevice Desk" sap2010:WorkflowViewState.IdRef="Sequence_6">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Int32" Name="int_chk" />
+      <Variable x:TypeArguments="x:String" Name="str_Worknotes" />
+      <Variable x:TypeArguments="x:String" Name="Str_AssigmentGroup" />
+      <Variable x:TypeArguments="x:Boolean" Name="B_LeavePage" />
+      <Variable x:TypeArguments="x:Boolean" Name="B_AssignmentGroup" />
+    </Sequence.Variables>
+    <Assign DisplayName="Assign" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">[int_chk]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">1</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign- Assignment group chk" sap2010:WorkflowViewState.IdRef="Assign_13">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[B_AssignmentGroup]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+      </Assign.Value>
+    </Assign>
+    <DoWhile DisplayName="Do While- If Matching Check" sap2010:WorkflowViewState.IdRef="DoWhile_1" Condition="[str_Worknotes IsNot Nothing]">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+        <Assign DisplayName="Assign-WorkNote is Nothing" sap2010:WorkflowViewState.IdRef="Assign_2">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:String">[nothing]</InArgument>
+          </Assign.Value>
+        </Assign>
+        <ui:GetFullText ContinueOnError="True" DisplayName="Get Full Text Work Notes" sap2010:WorkflowViewState.IdRef="GetFullText_1" IgnoreHidden="False">
+          <ui:GetFullText.Target>
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1ce040d4edddba1eab6d37a07c6e799a" Selector="[&quot;&lt;html app='firefox.exe' title='*BIS Greenfield - PROD' /&gt;&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl tag='LI' tableRow='1' parentid='sn_form_inline_stream_entries' idx='&quot;+int_chk.ToString+&quot;' /&gt;&quot;]" TimeoutMS="3000" WaitForReady="COMPLETE" />
+          </ui:GetFullText.Target>
+          <ui:GetFullText.Text>
+            <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
+          </ui:GetFullText.Text>
+        </ui:GetFullText>
+        <If Condition="[string.IsNullOrEmpty(str_Worknotes)]" DisplayName="If-Work Notes Are Empty" sap2010:WorkflowViewState.IdRef="If_4">
+          <If.Else>
+            <If Condition="[str_Worknotes.tolower.StartsWith(&quot;assignment group&quot;)]" DisplayName="If-WorkNote Are Not Empty" sap2010:WorkflowViewState.IdRef="If_1">
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_7">
+                  <Assign DisplayName="Assign-Assigment Group" sap2010:WorkflowViewState.IdRef="Assign_7">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:String">[Str_AssigmentGroup]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:String">[system.Text.RegularExpressions.Regex.Match(str_Worknotes.Trim,"(?&lt;=Assignment group).*").Value]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <If Condition="[not string.IsNullOrWhiteSpace(Str_AssigmentGroup) and Str_AssigmentGroup.Contains(&quot;was&quot;)]" DisplayName="If-Contains Was" sap2010:WorkflowViewState.IdRef="If_10">
+                    <If.Then>
+                      <Assign DisplayName="Assign-Assigment Group" sap2010:WorkflowViewState.IdRef="Assign_12">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:String">[Str_AssigmentGroup]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:String">[system.Text.RegularExpressions.Regex.Match(str_Worknotes,"(?&lt;=was).*").Value]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </If.Then>
+                  </If>
+                  <If Condition="[not string.IsNullOrWhiteSpace(Str_AssigmentGroup)]" DisplayName="If-AssignmentGroup Empty" sap2010:WorkflowViewState.IdRef="If_9">
+                    <If.Then>
+                      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_11">
+                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Into Assigned to" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_4" SendWindowMessages="False" SimulateType="False">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ef8be49a6f114b1f6805bffd8e08cad9" Selector="&lt;html app='firefox.exe' title='*BIS Greenfield - PROD' /&gt;&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl tag='INPUT' aaname='Assigned to' parentid='element.*.assigned_to' /&gt;" WaitForReady="COMPLETE" />
+                          </ui:TypeInto.Target>
+                          <ui:TypeInto.Text>
+                            <InArgument x:TypeArguments="x:String">
+                              <Literal x:TypeArguments="x:String" Value="" />
+                            </InArgument>
+                          </ui:TypeInto.Text>
+                        </ui:TypeInto>
+                        <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Warn" Message="[Str_AssigmentGroup+&quot;to check&quot;]" />
+                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="'Type into Assignment Groups'" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[Str_AssigmentGroup.Trim+ &quot;[k(enter)]&quot;]">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="7231ffc3dcd8ee6371664c9686a31f9a" Selector="&lt;html app='firefox.exe' title='*BIS Greenfield - PROD' /&gt;&lt;webctrl id='gsft_main' tag='IFRAME' /&gt;&lt;webctrl tag='INPUT' aaname='Assignment group' idx='1' /&gt;" WaitForReady="COMPLETE" />
+                          </ui:TypeInto.Target>
+                        </ui:TypeInto>
+                        <Assign DisplayName="Assign- Assignment group chk" sap2010:WorkflowViewState.IdRef="Assign_14">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Boolean">[B_AssignmentGroup]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <Assign DisplayName="Assign-Nothing " sap2010:WorkflowViewState.IdRef="Assign_8">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:String">[nothing]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                      </Sequence>
+                    </If.Then>
+                    <If.Else>
+                      <Assign sap2010:WorkflowViewState.IdRef="Assign_10">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:String">[str_Worknotes]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:String">[string.Empty]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </If.Else>
+                  </If>
+                </Sequence>
+              </If.Then>
+            </If>
+          </If.Else>
+        </If>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_6">
+          <Assign.To>
+            <OutArgument x:TypeArguments="x:Int32">[int_chk]</OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="x:Int32">[int_chk+1]</InArgument>
+          </Assign.Value>
+        </Assign>
+      </Sequence>
+    </DoWhile>
+    <If Condition="[B_AssignmentGroup]" DisplayName="If-Assignment group not found" sap2010:WorkflowViewState.IdRef="If_11">
+      <If.Else>
+        <Throw Exception="[new businessruleexception(&quot;No assignment Group Found&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_2" />
+      </If.Else>
+    </If>
+    <ui:ImageFound DisplayName="Image Exists 'Leave Page'" Found="[B_LeavePage]" sap2010:WorkflowViewState.IdRef="ImageFound_1">
+      <ui:ImageFound.Image>
+        <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAFkAAAAsCAYAAAAO5BTdAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHhSURBVGhD7ZXBcYQwDEWph3pcTE7uxb3QQ860QAMONrYRijAkWX5mkn94M4ssJPsh2GFZlkiehZIBUDIASgZAyQAoGQAlA6BkAJQMgJIBUDIASgZAyQAoGcCp5OHtnXwD06UVTFgFyDWmSyuYqDfN80xuQMkAKBkAJQN4reTJx3FwMej4b5H3M8RBMfrJzn+IfyBZ7ydEN4zRTzL2LGDJ6YB1olSemjoXSmz0cWp5U/RjFdSpVTH3k2qU+i1H9W25osfoomu91Vr3zGDJwe2v6uTHOLhQ1tR0tTpSaokX6ee1BNZ+ckw+KKvvdi17zMGtMvfcW/0LQMnqQPm6l7utpQPIw2y/b9bK+6nTtnOcVomso2vqt+juWeCS9YHlRrfp2NdKnVQzT+/Zp6JyrJXp7men37fmfaN/ASy5/wCO38maWw4X5KF7tQSXknt9dQ8t+Ub/AlCy8Y2r0vR9+XqfjPzNW2W0e1dOa0muJF/0/dSjt2b1LzwgWb9GK4c/uBrfN5yoIjP5n1xP2DG/V6txJXml21f2cF5Mslo76194reS/zI0HdgYln5K+wXVSr6e1ByUDoGQAlAyAkgH8SDL5GqZLK5iwCpBrTJdWkLwWSgZAyQAoGQAlA6BkAJT8OEv8ADZlgqexEeCKAAAAAElFTkSuQmCC" />
+      </ui:ImageFound.Image>
+      <ui:ImageFound.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="3000" WaitForReady="COMPLETE" />
+      </ui:ImageFound.Target>
+    </ui:ImageFound>
+    <If Condition="[B_LeavePage]" DisplayName="If-Leave Page Exist" sap2010:WorkflowViewState.IdRef="If_7">
+      <If.Then>
+        <ui:ClickImage ContinueOnError="{x:Null}" DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Image 'Stay On Page'" sap2010:WorkflowViewState.IdRef="ClickImage_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False">
+          <ui:ClickImage.CursorPosition>
+            <ui:CursorPosition Position="Center">
+              <ui:CursorPosition.OffsetX>
+                <InArgument x:TypeArguments="x:Int32" />
+              </ui:CursorPosition.OffsetX>
+              <ui:CursorPosition.OffsetY>
+                <InArgument x:TypeArguments="x:Int32" />
+              </ui:CursorPosition.OffsetY>
+            </ui:CursorPosition>
+          </ui:ClickImage.CursorPosition>
+          <ui:ClickImage.Image>
+            <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAFIAAAAYCAYAAABp76qRAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHmSURBVFhH7ZbhkYQgDIWph3qoh14owC5sxBZsgDNgNIkh55w4uzPHj29mgUgeL0HXreuaB88ZRnbCTdOUB89xy7LkwXOGkZ0YRnZiGNmJYWQnDCNTDs5ldxBywrU5Zk/Hn6RooTorPs56/Es0jKwmhnTOzdFn52OeYfx1RkotoN/nONO5d9GNNMXRTt1jRFdgAVIgxYAYLARD2Q/Y4+O2h9yXoWqdc/Qi95FD7kPy+5CDpwVoaFNodGQVcnSghIlHg5W1FM4rRn8TwGwaw7u+sUbRjCxzqMnQt3HJT2LpWrmRIdU4BftjUzbGirTFcEA4MXk/fArkeTUWx3uczNHKWeZR44navQWhj+0JDYQ6iRY1lmMbSSmCG4fcgOqdB8E1FLaJuNVN5CByTclpzgtUffAs0yWNpM8A1FiObiR0otLGIKZUmomvCfn76DwYXIkQ9Gt9rTKMextp6ZP5pZHWvpxGR4rkx5xySPXApHJyLLi8o9g7Uu6rHKw1j6j7nHou+a017VbtGFe7mqm3NVQO5qrA8iLGuPLlo0WAWOOgLI88sDH+bZ5g6yP5w/Yv4ehIsWY0A3D/HflX4KDG1+6ruFGUFq8aWTvBruRnwZt1r+ss3u/If8IwshPDyE4MIzsxjOzCkn8AQ633tjHwyLYAAAAASUVORK5CYII=" />
+          </ui:ClickImage.Image>
+          <ui:ClickImage.Target>
+            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="COMPLETE" />
+          </ui:ClickImage.Target>
+        </ui:ClickImage>
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d1RDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXEFzc2lnbiBCYWNrIFRvIFNldmljZSBEZXNrLnhhbWxCRQPrAQ4CAQFNBVQOAgFYVQVcDgIBVF0FxgEPAgERxwEFywEKAgEMzAEF0wEVAgEH1AEF6QEKAgECUi9SMAIBW08wTzkCAVlaMVo2AgFXVzJXRQIBVV1uXY0BAgFSXgfFARICARLHARPHASgCAQ3JAQnJAYsBAgEP0QFf0QFlAgELzAFCzAFRAgEJzgEzzgE4AgEI1AET1AEiAgED1gEJ5wEZAgEFXwlmEgIBTmcJbhoCAUdvCbwBDgIBGL0BCcQBEgIBE8kBGskBXgIBEOIBN+IBPAIBBmQ0ZD0CAVFhNWFEAgFPaYcBafgCAgFMaYMDaYkDAgFLZylnLwIBSmw1bEQCAUhvF28+AgEZcQ26ARICARvCATPCAT4CARa/ATS/AT0CARRxG3FdAgEccxG4ARwCAR50E3scAgFCfBOHARgCATmIARO3ARgCAR95PnmhAQIBRXY/dlMCAUN8IXyHAQIBOn4XhQEgAgE9iAEhiAFWAgEgigEXqwEiAgEmrgEXtQEgAgEigwFCgwGTAQIBQIABQ4ABVwIBPosBGZQBJwIBNpUBGZUBtAECATOWARmaAScCAS+bARmiASICASujARmqASICASezAUKzAVACASWwAUOwAVICASONAawBjQHtAgIBOJEBH5EBTgIBN5UBhgGVAbEBAgE0mAGsAZgB2QICATKWAbUClgHoAgIBMKABRaABSQIBLp0BRp0BWQIBLKgBRKgBTQIBKqUBRaUBVAIBKA==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,60" />
+      <sap2010:ViewStateData Id="Assign_13" sap:VirtualizedContainerService.HintSize="464,60" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="GetFullText_1" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="Assign_7" sap:VirtualizedContainerService.HintSize="603,60" />
+      <sap2010:ViewStateData Id="Assign_12" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="603,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TypeInto_4" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="314,91" />
+      <sap2010:ViewStateData Id="TypeInto_1" sap:VirtualizedContainerService.HintSize="314,134" />
+      <sap2010:ViewStateData Id="Assign_14" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="336,763">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_10" sap:VirtualizedContainerService.HintSize="242,60" />
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="603,911">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="625,1383">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="750,1531">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="314,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_6" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="336,521">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="DoWhile_1" sap:VirtualizedContainerService.HintSize="464,683">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Throw_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="464,208" />
+      <sap2010:ViewStateData Id="ImageFound_1" sap:VirtualizedContainerService.HintSize="464,106" />
+      <sap2010:ViewStateData Id="ClickImage_1" sap:VirtualizedContainerService.HintSize="314,106" />
+      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="464,254" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="486,1752">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Assign_Back_To_Sevice_Desk_1" sap:VirtualizedContainerService.HintSize="526,1832" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

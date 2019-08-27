@@ -78,6 +78,7 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="ss:SecureString" Name="out_Password" />
       <Variable x:TypeArguments="x:String" Name="out_UserName" />
+      <Variable x:TypeArguments="x:Boolean" Name="B_HomePageExist" />
     </Sequence.Variables>
     <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Starting&quot;]" />
     <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[in_ServiceNowCredentials]" DisplayName="Private: Get Credential" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[out_Password]" Username="[out_UserName]" />
@@ -87,67 +88,68 @@
           <Sequence DisplayName="Action" sap2010:WorkflowViewState.IdRef="Sequence_4">
             <TryCatch DisplayName="Try Catch- ServiceNow Login Application" sap2010:WorkflowViewState.IdRef="TryCatch_1">
               <TryCatch.Try>
-                <ui:OpenBrowser BrowserType="Firefox" DisplayName="Open Browser- ServiceNow " Hidden="False" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" NewSession="False" Private="False" UiBrowser="[o_ServiceNowBrowser]" Url="[in_ServiceNow_Url]">
-                  <ui:OpenBrowser.Body>
-                    <ActivityAction x:TypeArguments="x:Object">
-                      <ActivityAction.Argument>
-                        <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
-                      </ActivityAction.Argument>
-                      <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_1">
-                        <Sequence.Variables>
-                          <Variable x:TypeArguments="x:Boolean" Name="B_UserIdExist" />
-                          <Variable x:TypeArguments="x:Boolean" Name="B_HomePageExist" />
-                        </Sequence.Variables>
-                        <ui:MaximizeWindow Window="{x:Null}" DisplayName="Maximize Window" sap2010:WorkflowViewState.IdRef="MaximizeWindow_1" />
-                        <ui:UiElementExists DisplayName="Element Exists 'User Id'" Exists="[B_UserIdExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
-                          <ui:UiElementExists.Target>
-                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ecd6e906ab9f411798288dac26753401" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl name='USER' tag='INPUT' class='field' parentid='prompt' type='text' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
-                          </ui:UiElementExists.Target>
-                        </ui:UiElementExists>
-                        <If Condition="[B_UserIdExist]" DisplayName="If Browser Launch Successful" sap2010:WorkflowViewState.IdRef="If_1">
-                          <If.Else>
-                            <Throw Exception="[new system.Exception(&quot;Launching ServiceNow Application Failed&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_1" />
-                          </If.Else>
-                        </If>
-                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Into  User Id" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[out_UserName]">
-                          <ui:TypeInto.Target>
-                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a87eeeed02332d00e61cef6dacef0338" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl name='USER' tag='INPUT' class='field' parentid='prompt' type='text' /&gt;" WaitForReady="COMPLETE" />
-                          </ui:TypeInto.Target>
-                        </ui:TypeInto>
-                        <ui:TypeSecureText DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Secure Text 'Password'" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeSecureText_1" SecureText="[out_Password]" SendWindowMessages="False" SimulateType="True">
-                          <ui:TypeSecureText.Target>
-                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="acd37bdee4978b8c6505dc42ccc53e01" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl name='PASSWORD' tag='INPUT' parentid='prompt' type='password' /&gt;" WaitForReady="COMPLETE" />
-                          </ui:TypeSecureText.Target>
-                        </ui:TypeSecureText>
-                        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Submit Password'" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
-                          <ui:Click.CursorPosition>
-                            <ui:CursorPosition Position="Center">
-                              <ui:CursorPosition.OffsetX>
-                                <InArgument x:TypeArguments="x:Int32" />
-                              </ui:CursorPosition.OffsetX>
-                              <ui:CursorPosition.OffsetY>
-                                <InArgument x:TypeArguments="x:Int32" />
-                              </ui:CursorPosition.OffsetY>
-                            </ui:CursorPosition>
-                          </ui:Click.CursorPosition>
-                          <ui:Click.Target>
-                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="dde223abfc079f70ffb5e1f78d2d8b7a" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl tag='INPUT' type='submit' aaname='Sign In' parentname='Login' /&gt;" WaitForReady="COMPLETE" />
-                          </ui:Click.Target>
-                        </ui:Click>
-                        <ui:UiElementExists DisplayName="Element Exists 'Home Page'" Exists="[B_HomePageExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
-                          <ui:UiElementExists.Target>
-                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ddc3020290ad31dc85de8c81797acc34" Selector="&lt;html app='firefox.exe' title='*BIS Greenfield - PROD' /&gt;&lt;webctrl aaname='BIS Greenfield Prod' tag='SPAN' /&gt;" TimeoutMS="20000" WaitForReady="COMPLETE" />
-                          </ui:UiElementExists.Target>
-                        </ui:UiElementExists>
-                        <If Condition="[B_HomePageExist]" DisplayName="If Home Page Loaded Successful" sap2010:WorkflowViewState.IdRef="If_3">
-                          <If.Else>
-                            <Throw Exception="[new system.Exception(&quot;Home Page Load Error&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_3" />
-                          </If.Else>
-                        </If>
-                      </Sequence>
-                    </ActivityAction>
-                  </ui:OpenBrowser.Body>
-                </ui:OpenBrowser>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_6">
+                  <ui:OpenBrowser BrowserType="Firefox" DisplayName="Open Browser- ServiceNow " Hidden="False" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" NewSession="False" Private="False" UiBrowser="[o_ServiceNowBrowser]" Url="[in_ServiceNow_Url]">
+                    <ui:OpenBrowser.Body>
+                      <ActivityAction x:TypeArguments="x:Object">
+                        <ActivityAction.Argument>
+                          <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                        </ActivityAction.Argument>
+                        <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_1">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="x:Boolean" Name="B_UserIdExist" />
+                          </Sequence.Variables>
+                          <ui:MaximizeWindow Window="{x:Null}" DisplayName="Maximize Window" sap2010:WorkflowViewState.IdRef="MaximizeWindow_1" />
+                          <ui:UiElementExists DisplayName="Element Exists 'User Id'" Exists="[B_UserIdExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+                            <ui:UiElementExists.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ecd6e906ab9f411798288dac26753401" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl name='USER' tag='INPUT' class='field' parentid='prompt' type='text' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                            </ui:UiElementExists.Target>
+                          </ui:UiElementExists>
+                          <If Condition="[B_UserIdExist]" DisplayName="If Browser Launch Successful" sap2010:WorkflowViewState.IdRef="If_1">
+                            <If.Else>
+                              <Throw Exception="[new system.Exception(&quot;Launching ServiceNow Application Failed&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_1" />
+                            </If.Else>
+                          </If>
+                          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Into  User Id" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[out_UserName]">
+                            <ui:TypeInto.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a87eeeed02332d00e61cef6dacef0338" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl name='USER' tag='INPUT' class='field' parentid='prompt' type='text' /&gt;" WaitForReady="COMPLETE" />
+                            </ui:TypeInto.Target>
+                          </ui:TypeInto>
+                          <ui:TypeSecureText DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Secure Text 'Password'" EmptyField="True" sap2010:WorkflowViewState.IdRef="TypeSecureText_1" SecureText="[out_Password]" SendWindowMessages="False" SimulateType="True">
+                            <ui:TypeSecureText.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="acd37bdee4978b8c6505dc42ccc53e01" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl name='PASSWORD' tag='INPUT' parentid='prompt' type='password' /&gt;" WaitForReady="COMPLETE" />
+                            </ui:TypeSecureText.Target>
+                          </ui:TypeSecureText>
+                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Submit Password'" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                            <ui:Click.CursorPosition>
+                              <ui:CursorPosition Position="Center">
+                                <ui:CursorPosition.OffsetX>
+                                  <InArgument x:TypeArguments="x:Int32" />
+                                </ui:CursorPosition.OffsetX>
+                                <ui:CursorPosition.OffsetY>
+                                  <InArgument x:TypeArguments="x:Int32" />
+                                </ui:CursorPosition.OffsetY>
+                              </ui:CursorPosition>
+                            </ui:Click.CursorPosition>
+                            <ui:Click.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="dde223abfc079f70ffb5e1f78d2d8b7a" Selector="&lt;html app='firefox.exe' title='Bombardier Aerospace Portal' /&gt;&lt;webctrl tag='INPUT' type='submit' aaname='Sign In' parentname='Login' /&gt;" WaitForReady="COMPLETE" />
+                            </ui:Click.Target>
+                          </ui:Click>
+                          <ui:UiElementExists DisplayName="Element Exists 'Home Page'" Exists="[B_HomePageExist]" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+                            <ui:UiElementExists.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="ddc3020290ad31dc85de8c81797acc34" Selector="&lt;html app='firefox.exe' title='*BIS Greenfield - PROD' /&gt;&lt;webctrl aaname='BIS Greenfield Prod' tag='SPAN' /&gt;" TimeoutMS="20000" WaitForReady="COMPLETE" />
+                            </ui:UiElementExists.Target>
+                          </ui:UiElementExists>
+                          <If Condition="[B_HomePageExist]" DisplayName="If Home Page Loaded Successful" sap2010:WorkflowViewState.IdRef="If_3">
+                            <If.Else>
+                              <Throw Exception="[new system.Exception(&quot;Home Page Load Error&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_3" />
+                            </If.Else>
+                          </If>
+                        </Sequence>
+                      </ActivityAction>
+                    </ui:OpenBrowser.Body>
+                  </ui:OpenBrowser>
+                </Sequence>
               </TryCatch.Try>
               <TryCatch.Catches>
                 <Catch x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="Catch`1_1">
@@ -171,12 +173,12 @@
       </ui:RetryScope.Condition>
     </ui:RetryScope>
     <ui:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Ending&quot;]" />
-    <sads:DebugSymbol.Symbol>d1xDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXFNlcnZpY2UgTm93IExvZ2luXFNlcnZpY2VOb3cgTG9naW4ueGFtbDEBxgEB7gEBAwF1AZwBAQJNA68BDgIBAVIFUo0BAgE6UwVT6wECATNUBawBFQIBBK0BBa0BiwECAQJSclKKAQIBO1M7U1cCAThT2AFT6AECATZTvgFTzgECATRUnAFUpgECATJUigFUjQECATFXC6YBFgIBBa0Bcq0BiAECAQNYDaUBGAIBBloRlgEiAgEMngEVoQEgAgEHWssBWuIBAgEvWucBWvwBAgEtYBeTASICAQ2fARefAYsBAgEJoAEXoAFOAgEIZRllkQECASxmGWouAgEnaxlvHgIBInAZdCcCAR51GXktAgEaehmIASQCARiJARmNAS4CAROOARmSAR4CAQ6fASyfAUMCAQpolwFosgICAStovQJowwICASpmW2ZsAgEoaydrOAIBI20dbagBAgElcqwBcscCAgEhcKkCcLkCAgEfd6wBd8ECAgEddZUCdaUCAgEbhgGsAYYBwQICARmLAZcBiwGRAgIBF4sBnAKLAaMCAgEWiQFdiQFwAgEUjgEnjgE6AgEPkAEdkAGVAQIBEW0ubXsCASaQAS6QAWgCARI=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1xDOlxVc2Vyc1xWZW5rYXRlc2hfU2luZ2Ftc2l0dFxEZXNrdG9wXEJvbWJhcmRpZXItMTAwXFNlcnZpY2UgTm93IExvZ2luXFNlcnZpY2VOb3cgTG9naW4ueGFtbDIBxgEB7gEBAwF1AZwBAQJNA7EBDgIBAVMFU40BAgE7VAVU6wECATRVBa4BFQIBBK8BBa8BiwECAQJTclOKAQIBPFQ7VFcCATlU2AFU6AECATdUvgFUzgECATVVnAFVpgECATNVigFVjQECATJYC6gBFgIBBa8Bcq8BiAECAQNZDacBGAIBBlsRmAEcAgEMoAEVowEgAgEHXBOXASQCAQ2hARehAYsBAgEJogEXogFOAgEIXM0BXOQBAgEwXOkBXP4BAgEuYhmUASQCAQ6hASyhAUMCAQpmG2aTAQIBLWcbazACAShsG3AgAgEjcRt1KQIBH3Ybei8CARt7G4kBJgIBGYoBG44BMAIBFI8BG5MBIAIBD2mZAWm0AgIBLGm/AmnFAgIBK2ddZ24CASlsKWw6AgEkbh9uqgECASZzrgFzyQICASJxqwJxuwICASB4rgF4wwICAR52lwJ2pwICARyHAa4BhwHDAgIBGowBmQGMAZMCAgEYjAGeAowBpQICAReKAV+KAXICARWPASmPATwCARCRAR+RAZcBAgESbjBufQIBJ5EBMJEBagIBEw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="562,91" />
-      <sap2010:ViewStateData Id="GetRobotCredential_1" sap:VirtualizedContainerService.HintSize="562,22" />
+      <sap2010:ViewStateData Id="LogMessage_1" sap:VirtualizedContainerService.HintSize="584,91" />
+      <sap2010:ViewStateData Id="GetRobotCredential_1" sap:VirtualizedContainerService.HintSize="584,22" />
       <sap2010:ViewStateData Id="MaximizeWindow_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="UiElementExists_1" sap:VirtualizedContainerService.HintSize="464,106" />
       <sap2010:ViewStateData Id="Throw_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -209,6 +211,13 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="522,1621">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="CloseTab_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Rethrow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
@@ -218,7 +227,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="504,21">
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="526,21">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">False</x:Boolean>
@@ -226,7 +235,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="518,1724">
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="540,1848">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -234,14 +243,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="540,1848">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="562,1972">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="RetryScope_1" sap:VirtualizedContainerService.HintSize="562,2022">
+      <sap2010:ViewStateData Id="RetryScope_1" sap:VirtualizedContainerService.HintSize="584,2146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -249,8 +258,8 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="562,91" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="584,2512">
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="584,91" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="606,2636">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -258,7 +267,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ServiceNow_Login_1" sap:VirtualizedContainerService.HintSize="624,2592" />
+      <sap2010:ViewStateData Id="ServiceNow_Login_1" sap:VirtualizedContainerService.HintSize="646,2716" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
