@@ -2703,7 +2703,7 @@
       ]
     },
     "UiPath.GoogleSpeech.Activities/0.1.6850.39757": {
-      "sha512": "XAq3OzaERT50yq97TF1JhiGwf5yEblc3uhe3Oc3vjVk+9Rj5DK0e4oHiwtKc1/SWbTqnZZ34IkLW+6MlpHFirA==",
+      "sha512": "rrCb17mPZEkS9JwfPvbwnXTkwZsxt1V6KuJnEarLRIi4nnLauS9Qtn+772cjgiG7Lnu+Q1Kv6zeEo7NnK6V/gQ==",
       "type": "package",
       "path": "uipath.googlespeech.activities/0.1.6850.39757",
       "files": [
@@ -3081,8 +3081,8 @@
   },
   "project": {
     "restore": {
-      "projectUniqueName": "NTTData_UIPath_Template",
-      "projectName": "NTTData_UIPath_Template",
+      "projectUniqueName": "Bombardier-100",
+      "projectName": "Bombardier-100",
       "projectPath": "C:\\Users\\Venkatesh_Singamsitt\\Desktop\\Bombardier-100\\.local",
       "packagesPath": "C:\\Users\\Venkatesh_Singamsitt\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Venkatesh_Singamsitt\\Desktop\\Bombardier-100\\.local"
